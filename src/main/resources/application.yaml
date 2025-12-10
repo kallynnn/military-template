@@ -1,11 +1,30 @@
-# Spring Application Configuration
 spring:
   application:
-    name: military-api
-
-  # Database Configuration
+    name: military-warehouse-api
+  
+  # Налаштування Бази Даних
   datasource:
-    url: jdbc:postgresql://localhost:5432/military_db
-    username: military_user
-    password: military_pass
+    url: jdbc:postgresql://localhost:5432/warehouse_db
+    username: warehouse_user
+    password: warehouse_pass
     driver-class-name: org.postgresql.Driver
+
+  # Налаштування JPA / Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+
+# Налаштування Swagger (документації)
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
