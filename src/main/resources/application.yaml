@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: military-warehouse-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/warehouse_db
+    username: warehouse_user  # (або postgres, як у вас налаштовано)
+    password: warehouse_pass  # (або ваш пароль)
+    driver-class-name: org.postgresql.Driver
+
+  # ДОДАЄМО LIQUIBASE
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
+
+  jpa:
+    hibernate:
+      # ЗМІНЮЄМО НА NONE (або validate), щоб Hibernate не чіпав таблиці
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

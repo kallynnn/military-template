@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: military-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: warehouse_user      # <--- МАЄ БУТИ ТАКИМ ЖЕ ЯК В JAVA
+      POSTGRES_PASSWORD: warehouse_pass  # <--- МАЄ БУТИ ТАКИМ ЖЕ ЯК В JAVA
+      POSTGRES_DB: warehouse_db
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
