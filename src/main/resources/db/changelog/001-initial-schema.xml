@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001-create-tables" author="cadet">
+        
+        <createTable tableName="supply_categories">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="code" type="VARCHAR(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(500)"/>
+            <column name="requires_cold_storage" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <createTable tableName="warehouses">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="code" type="VARCHAR(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="address" type="VARCHAR(200)"/>
+            <column name="capacity" type="INTEGER"/>
+            <column name="current_occupancy" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="has_refrigeration" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <createTable tableName="supply_items">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="batch_number" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="quantity" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit" type="VARCHAR(20)" defaultValue="шт"/>
+            <column name="hazard_class" type="VARCHAR(30)"/>
+            <column name="storage_conditions" type="VARCHAR(200)"/>
+            <column name="expiration_date" type="DATE"/>
+            <column name="status" type="VARCHAR(20)"/>
+            <column name="category_id" type="BIGINT"/>
+            <column name="warehouse_id" type="BIGINT"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="supply_items" baseColumnNames="category_id"
+                                 referencedTableName="supply_categories" referencedColumnNames="id"
+                                 constraintName="fk_items_category"/>
+        
+        <addForeignKeyConstraint baseTableName="supply_items" baseColumnNames="warehouse_id"
+                                 referencedTableName="warehouses" referencedColumnNames="id"
+                                 constraintName="fk_items_warehouse"/>
+
+        <createTable tableName="supply_movements">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="item_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="recipient_name" type="VARCHAR(100)"/>
+            <column name="recipient_unit" type="VARCHAR(50)"/>
+            <column name="notes" type="VARCHAR(500)"/>
+            <column name="performed_by" type="VARCHAR(100)"/>
+            <column name="performed_at" type="TIMESTAMP"/>
+            <column name="version" type="BIGINT"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="supply_movements" baseColumnNames="item_id"
+                                 referencedTableName="supply_items" referencedColumnNames="id"
+                                 constraintName="fk_movements_item"/>
+
+    </changeSet>
+</databaseChangeLog>
